@@ -1,19 +1,19 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const verifyToken = async (req, res, next) => {
   const token = req.headers["token"];
 
   if (token) {
-    jwt.verify(token, "secreto", (error, data) => {
-      if (error) return res.status(400).json({ mensaje: "Token invalido" });
-      else {
-        req.user = data;
-        next();
-      }
-    });
+    try {
+      const data = await jwt.verify(token, "secreto");
+      req.user = data;
+      next();
+    } catch (error) {
+      res.status(400).json({ mensaje: "Token inválido" });
+    }
   } else {
     res.status(400).json({ mensaje: "Debes enviar un token" });
   }
 };
 
-module.exports = verifyToken;
+export default verifyToken;

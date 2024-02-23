@@ -1,18 +1,21 @@
-const bcrypt = require("bcrypt");
-const Usuario = require("../model/usuario");
+import bcrypt from "bcrypt";
+import Usuario from "../model/usuario";
 
 const register = async (req, res) => {
   const { nombre, correo, contraseña, celular } = req.body;
 
-  Usuario.findOne({ correo }).then((usuario) => {
+  try {
+    const usuario = await Usuario.findOne({ correo });
+
     if (usuario) {
       return res.json({ mensaje: "Ya existe un usuario con ese correo" });
     } else if (!nombre || !correo || !contraseña || !celular) {
       return res.json({ mensaje: "Falta el nombre / correo / contraseña" });
     } else {
-      bcrypt.hash(contraseña, 10, (error, contraseñaHasheada) => {
-        if (error) res.json({ error });
-        else {
+      bcrypt.hash(contraseña, 10, async (error, contraseñaHasheada) => {
+        if (error) {
+          return res.json({ error });
+        } else {
           const nuevoUsuario = new Usuario({
             nombre,
             correo,
@@ -20,16 +23,21 @@ const register = async (req, res) => {
             celular,
           });
 
-          nuevoUsuario
-            .save()
-            .then((usuario) => {
-              res.json({ mensaje: "Usuario creado correctamente", usuario });
-            })
-            .catch((error) => console.error(error));
+          try {
+            const usuarioGuardado = await nuevoUsuario.save();
+            res.json({ mensaje: "Usuario creado correctamente", usuario: usuarioGuardado });
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ mensaje: "Error al guardar el nuevo usuario" });
+          }
         }
       });
     }
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al buscar el usuario por correo" });
+  }
 };
 
-module.exports = register;
+export default register;
+

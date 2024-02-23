@@ -1,9 +1,10 @@
-const register = require("./register");
-const login = require("./login");
-const getUserById = require("./getUserById");
+import register from "./register";
+import login from "./login";
+import getUserById from "./getUserById";
 
-module.exports = {
+export {
   register,
   login,
   getUserById,
 };
+
