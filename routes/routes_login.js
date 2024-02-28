@@ -1,13 +1,13 @@
 import express from "express";
-import { login , register , getUserById } from "../controllers/controller.js";
+import { login , register , getUserById } from "../controllers/controller_log.js";
 
 import verifyToken from "../middlewares/verifyToken.js";
 
-const router = express.Router();
+const route_log = express.Router();
 
-router.get("/user", verifyToken , getUserById);
-router.post("/register",register);
-router.post("/login", login);
+route_log.get("/user", verifyToken , getUserById);
+route_log.post("/register",register);
+route_log.post("/login", login);
 
-export default router;
+export default route_log;
 
