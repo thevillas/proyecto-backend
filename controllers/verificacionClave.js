@@ -1,21 +1,21 @@
-const verificar = (contraseña) => {
+const verificar = (clave) => {
     
-    if (contraseña.length < 8) {
+    if (clave.length < 8) {
       return false;
     }
   
     
-    if (!/[a-z]/.test(contraseña) || !/[A-Z]/.test(contraseña)) {
+    if (!/[a-z]/.test(clave) || !/[A-Z]/.test(clave)) {
       return false;
     }
   
     
-    if (!/[!@#$%^&*(),.?":{}|<>0-9]/.test(contraseña)) {
+    if (!/[!@#$%^&*(),.?":{}|<>0-9]/.test(clave)) {
       return false;
     }
   
     const palabrasComunes = ["password", "123456", "qwerty"];
-    if (palabrasComunes.includes(contraseña.toLowerCase())) {
+    if (palabrasComunes.includes(clave.toLowerCase())) {
       return false;
     }
   
