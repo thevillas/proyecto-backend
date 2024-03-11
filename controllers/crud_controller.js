@@ -1,77 +1,86 @@
-
+import User from "../model/usuario.js";
 
 export const create = async(req, res)=>{
-    const { nombre, correo, contraseña } = req.body;
+    try {
 
-    connection.query(
-    "INSERT INTO usuarios (nombre, correo, contraseña) VALUES (?, ?, ?)",
-    [nombre, correo, contraseña],
-    (error, results) => {
-        if (error) {
-        console.error("Error al crear usuario:", error);
-        res.status(500).json({ mensaje: "Error interno del servidor" });
-        } else {
-        res.json({ mensaje: "Usuario creado correctamente", usuario: results.insertId });
+        const userData = new User(req.body);
+
+        if(!userData){
+            return res.status(404).json({msg: "User data not found"});
+
+            
         }
-    }
-    );
 
+        await userData.save();
+        res.status(200).json({msg: "User created successfully"});
+
+    } catch (error) {
+        res.status(500).json({error: error.message,});
+        
+    }
 }
 
 export const getAll = async(req, res) =>{
-    connection.query("SELECT * FROM usuarios", (error, results) => {
-        if (error) {
-        console.error("Error al obtener usuarios:", error);
-        res.status(500).json({ mensaje: "Error interno del servidor" });
-        } else {
-        res.json(results);
+    try {
+
+        const userData = await User.find();
+        if(!userData){
+            return res.status(404).json({msg:"User data not found"});
         }
-    });
+        res.status(200).json(userData);
+        
+    } catch (error) {
+        res.status(500).json({error: error});
+    }
 }
 
 
 export const getOne = async(req, res) =>{
-    const userId = req.params.id;
+    try {
 
-    connection.query("SELECT * FROM usuarios WHERE id = ?", [userId], (error, results) => {
-    if (error) {
-        console.error("Error al obtener usuario por ID:", error);
-        res.status(500).json({ mensaje: "Error interno del servidor" });
-    } else {
-        res.json(results[0]); // Suponiendo que esperas un solo resultado
+        const id = req.params.id;
+        const userExist = await User.findById(id);
+        if(!userExist){
+            return res.status(404).json({msg: "User not found"});
+        }
+        res.status(200).json(userExist);
+        
+    } catch (error) {
+        res.status(500).json({error: error});
     }
-    });
 }
 
 
 export const update = async(req, res) =>{
-    const userId = req.params.id;
-    const { nombre, correo, contraseña } = req.body;
+    try {
 
-    connection.query(
-    "UPDATE usuarios SET nombre = ?, correo = ?, contraseña = ? WHERE id = ?",
-    [nombre, correo, contraseña, userId],
-    (error, results) => {
-        if (error) {
-        console.error("Error al actualizar usuario:", error);
-        res.status(500).json({ mensaje: "Error interno del servidor" });
-        } else {
-        res.json({ mensaje: "Usuario actualizado correctamente" });
+        const id = req.params.id;
+        const userExist = await User.findById(id);
+        if(!userExist){
+            return res.status(401).json({msg:"User not found"});
         }
+
+        const updatedData = await User.findByIdAndUpdate(id, req.body, {new:true});
+        res.status(200).json({msg: "User updated successfully"});
+        
+    } catch (error) {
+        res.status(500).json({error: error});
     }
-    );
 }
 
 
 export const deleteUser = async(req, res) =>{
-    const userId = req.params.id;
+    try {
 
-    connection.query("DELETE FROM usuarios WHERE id = ?", [userId], (error, results) => {
-    if (error) {
-        console.error("Error al eliminar usuario:", error);
-        res.status(500).json({ mensaje: "Error interno del servidor" });
-    } else {
-        res.json({ mensaje: "Usuario eliminado correctamente" });
+        const id = req.params.id;
+        const userExist = await User.findById(id);
+        if(!userExist){
+            return res.status(404).json({msg: "User not exist"});
+        }
+        await User.findByIdAndDelete(id);
+        res.status(200).json({msg: "User deleted successfully"});
+        
+    } catch (error) {
+        res.status(500).json({error: error});
     }
-    });
 }
