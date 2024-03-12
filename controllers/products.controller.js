@@ -21,9 +21,7 @@ export const createProduct = async (req, res) => {
 };
 
 export const getProductById = async (req, res) => {
-  const { productId } = req.params;
-
-  const product = await Product.findById(productId);
+  const product = await Product.findById(req.params.productId);
   res.status(200).json(product);
 };
 
@@ -48,6 +46,6 @@ export const deleteProductById = async (req, res) => {
 
   await Product.findByIdAndDelete(productId);
 
-  // code 200 is ok too
+  
   res.status(204).json();
 };
