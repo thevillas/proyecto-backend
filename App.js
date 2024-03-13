@@ -4,6 +4,7 @@ import db from "./database/db.js";
 import route_log from "./routes/routes_login.js";
 import route_crud from "./routes/router_UserCrud.js";
 import route_prod from "./routes/products_routes.js";
+import route_cart from "./routes/Cart_routes.js";
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
@@ -31,5 +32,6 @@ app.listen(PORT, () => {
 app.use("/api", route_crud);
 app.use("/api/prod/", route_prod);
 app.use("/log", route_log);
+app.use("/cart/", route_cart);
 
 export default app;
