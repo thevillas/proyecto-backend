@@ -20,17 +20,16 @@ export const login = async (req, res) => {
         const esCorrecta = await bcrypt.compare(contraseña, user.contraseña);
 
         if (esCorrecta) {
-            const { id, nombre } = user;
+            const { id, nombre, role } = user;
 
             const data = {
                 id,
                 nombre,
+                role
             };
 
-            
             const token = generateToken(data);
 
-            
             res.cookie('token', token, { httpOnly: true });
 
             res.json({
@@ -39,6 +38,7 @@ export const login = async (req, res) => {
                     id,
                     nombre,
                     token,
+                    role,
                 },
             });
         } else {
@@ -57,7 +57,7 @@ export const login = async (req, res) => {
 
 //register
 export const register = async (req, res) => {
-    const { nombre, correo, contraseña, celular } = req.body;
+    const { nombre, correo, contraseña, celular, role } = req.body;
 
     if (!verificar(contraseña)) {
         return res.json({ mensaje: "La contraseña no cumple con los criterios de seguridad" });
@@ -81,6 +81,7 @@ export const register = async (req, res) => {
                         correo,
                         contraseña: contraseñaHasheada,
                         celular,
+                        role
                     });
 
                     try {
@@ -127,8 +128,11 @@ export const getUserById = async (req, res) => {
     }
 };
 
+
+
+
+//cerrar sesion
 export const logout = (req, res) => {
-    // Eliminar la cookie
     res.clearCookie('token');
     res.json({ mensaje: "Has cerrado sesión correctamente" });
   };

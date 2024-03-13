@@ -1,14 +1,24 @@
 import User from "../model/usuario.js";
+import verificar from "./verificacionClave.js";
+import bcrypt from "bcrypt";
+
+
 
 export const create = async(req, res)=>{
     try {
+        const { contraseña, ...rest } = req.body;
 
-        const userData = new User(req.body);
+        if (!verificar(contraseña)) {
+            return res.json({ mensaje: "La contraseña no cumple con los criterios de seguridad" });
+        }
+
+        // Hashear la contraseña
+        const hashedContraseña = await bcrypt.hash(contraseña, 10);
+
+        const userData = new User({ contraseña: hashedContraseña, ...rest });
 
         if(!userData){
             return res.status(404).json({msg: "User data not found"});
-
-            
         }
 
         await userData.save();
@@ -16,9 +26,10 @@ export const create = async(req, res)=>{
 
     } catch (error) {
         res.status(500).json({error: error.message,});
-        
     }
 }
+
+
 
 export const getAll = async(req, res) =>{
     try {

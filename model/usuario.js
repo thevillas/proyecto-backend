@@ -19,6 +19,11 @@ const UsuarioSchema = new Schema({
   celular: {
     type: Number,
     required: true
+  },
+  role: {
+    type: String,
+    default: 'user',
+    enum: ['user', 'admin' , 'moderador'] 
   }
 });
 
