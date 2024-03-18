@@ -63,10 +63,11 @@ export const getCart = async (req, res) => {
             return res.status(404).json({ mensaje: "No se encontró el carrito" });
         }
 
-        // Extrae los nombres de los productos
+        
         const productNames = cart.items.map(item => item.product ? item.product.name : null);
 
-        // Filtra los nombres de los productos para eliminar los valores null
+        
+        
         const filteredProductNames = productNames.filter(name => name !== null);
 
         res.status(200).json({ user, cart, productNames: filteredProductNames });

@@ -8,6 +8,7 @@ import route_cart from "./routes/Cart_routes.js";
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import route_galery from "./routes/galery_route.js";
 
 
 const app = express();
@@ -18,7 +19,6 @@ app.use(cookieParser());
 
 
 
-app.use(cors());
 
 
 const PORT = 4000;
@@ -28,10 +28,12 @@ app.listen(PORT, () => {
   db();
 });
 
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
-app.use("/api", route_crud);
+app.use("/api/", route_crud);
 app.use("/api/prod/", route_prod);
 app.use("/log", route_log);
 app.use("/cart/", route_cart);
+app.use("/img/", route_galery);
 
 export default app;
