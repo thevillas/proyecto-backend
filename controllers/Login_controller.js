@@ -30,7 +30,7 @@ export const login = async (req, res) => {
 
             const token = generateToken(data);
 
-            res.cookie('token', token, { httpOnly: true });
+            res.cookie('token', token, { httpOnly: false });     //usar true en caso de hacer peticiones internas 
 
             res.json({
                 mensaje: "user logeado correctamente",
