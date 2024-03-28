@@ -31,7 +31,7 @@ app.listen(PORT, () => {
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 app.use("/api/", route_crud);
-app.use("/api/prod/", route_prod);
+app.use("/prod/", route_prod);
 app.use("/log", route_log);
 app.use("/cart/", route_cart);
 app.use("/img/", route_galery);

@@ -5,10 +5,10 @@ import { createImage, getAllImages , updateImageById, getImageById, deleteImageB
 
 const route_galery = Router();
 
-route_galery.post("/create", verifyToken, requireRole(['admin','moderador']), createImage);
 route_galery.get("/getall", verifyToken, requireRole(['admin','moderador']), getAllImages);
-route_galery.get("/getall/:id", verifyToken, requireRole(['admin','moderador']), getImageById);
-route_galery.put("/update/:id", verifyToken, requireRole(['admin','moderador']), updateImageById);
 route_galery.delete("/delete/:id", verifyToken, requireRole(['admin','moderador']), deleteImageById);
+route_galery.post("/create",  createImage);
+route_galery.get("/getall/:id",  getImageById);
+route_galery.put("/update/:id",  updateImageById);
 
 export default route_galery;
